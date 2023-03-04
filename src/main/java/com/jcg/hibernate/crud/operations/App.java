@@ -2,53 +2,47 @@ package com.jcg.hibernate.crud.operations;
 
 import org.apache.log4j.Logger;
 
+import com.google.gson.Gson;
 import com.jcg.hibernate.crud.operations.models.Contact;
+
+import static spark.Spark.*;
 
 public class App {
 
   public static final Logger logger = Logger.getLogger(App.class);
 
   public static void main(String[] args) {
-    logger.info("Hibernate Crud Operations Example");
 
-    read();
+    final var gson = new Gson();
 
-    create();
+    port(80);
 
-    read();
+    path("/api", () -> {
+      get("/contact", (req, res) -> {
+        return DbOperations.list();
+      }, gson::toJson);
 
-    update();
+      post("/contact", (req, res) -> {
+        DbOperations.create(Contact.builder()
+            // TODO: fix
+            .build());
 
-    read();
+        return "{}";
+      }, gson::toJson);
 
-    delete();
+      patch("/contact", (req, res) -> {
+        DbOperations.update(Contact.builder()
+            // TODO: fix
+            .build());
 
-    read();
-  }
+        return "{}";
+      }, gson::toJson);
 
-  static void create() {
-    logger.info("======= CREATE RECORDS");
+      delete("/contact/:id", (req, res) -> {
+        DbOperations.delete(Integer.valueOf(req.params("id")));
 
-    DbOperations.createRecord(Contact.builder().build());
-  }
-
-  static void read() {
-    logger.info("======= READ RECORDS");
-
-    for (final var contatoObj : DbOperations.displayRecords()) {
-      logger.info(contatoObj.toString());
-    }
-  }
-
-  static void update() {
-    logger.info("======= UPDATE RECORDS");
-
-    DbOperations.updateRecord(Contact.builder().id(1).build());
-  }
-
-  static void delete() {
-    logger.info("======= DELETE RECORD");
-
-    DbOperations.deleteRecord(1);
+        return "{}";
+      }, gson::toJson);
+    });
   }
 }

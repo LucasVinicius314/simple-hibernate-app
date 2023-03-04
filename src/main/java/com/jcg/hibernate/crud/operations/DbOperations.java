@@ -38,7 +38,7 @@ public class DbOperations {
     return sessionFactoryObj;
   }
 
-  public static void createRecord(Contact contact) {
+  public static void create(Contact contact) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
@@ -55,14 +55,14 @@ public class DbOperations {
     }
   }
 
-  public static List<Contact> displayRecords() {
+  public static List<Contact> list() {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
       return sessionObj
-          .createQuery("FROM CONTATOS_731506", Contact.class)
+          .createQuery("FROM Contact", Contact.class)
           .list();
     } catch (Exception sqlException) {
       if (null != sessionObj.getTransaction()) {
@@ -77,7 +77,7 @@ public class DbOperations {
     return new ArrayList<>();
   }
 
-  public static void updateRecord(Contact contact) {
+  public static void update(Contact contact) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
@@ -101,13 +101,13 @@ public class DbOperations {
     }
   }
 
-  public static void deleteRecord(int id) {
+  public static void delete(int id) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
-      sessionObj.remove(findRecordById(id));
+      sessionObj.remove(findById(id));
 
       sessionObj.getTransaction().commit();
     } catch (Exception sqlException) {
@@ -121,7 +121,7 @@ public class DbOperations {
     }
   }
 
-  public static Contact findRecordById(int id) {
+  public static Contact findById(int id) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
@@ -141,13 +141,13 @@ public class DbOperations {
     return null;
   }
 
-  public static void deleteAllRecords() {
+  public static void deleteAll() {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
-      sessionObj.createQuery("DELETE FROM CONTATOS_731506", Contact.class).executeUpdate();
+      sessionObj.createQuery("DELETE FROM Contact", Contact.class).executeUpdate();
 
       sessionObj.getTransaction().commit();
     } catch (Exception sqlException) {
