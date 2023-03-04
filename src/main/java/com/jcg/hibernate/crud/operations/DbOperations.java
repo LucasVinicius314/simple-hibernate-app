@@ -30,6 +30,7 @@ public class DbOperations {
     configObj.setProperty("show_sql", "true");
     configObj.setProperty("hibernate.current_session_context_class",
         "org.hibernate.context.internal.ThreadLocalSessionContext");
+    configObj.addAnnotatedClass(Contact.class);
 
     sessionFactoryObj = configObj
         .buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(configObj.getProperties())
