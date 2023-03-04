@@ -32,9 +32,7 @@ public class DbOperations {
         "org.hibernate.context.internal.ThreadLocalSessionContext");
     configObj.addAnnotatedClass(Contact.class);
 
-    sessionFactoryObj = configObj
-        .buildSessionFactory(new StandardServiceRegistryBuilder().applySettings(configObj.getProperties())
-            .build());
+    sessionFactoryObj = configObj.buildSessionFactory();
 
     return sessionFactoryObj;
   }
@@ -86,7 +84,7 @@ public class DbOperations {
 
       final var contactObj = sessionObj.get(Contact.class, contact.getId());
 
-      contactObj.setNome(contact.getNome());
+      contactObj.setName(contact.getName());
       contactObj.setAddress(contact.getAddress());
       contactObj.setPhoneNumber(contact.getPhoneNumber());
 

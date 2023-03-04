@@ -7,6 +7,8 @@ import com.jcg.hibernate.crud.operations.models.Contact;
 
 import static spark.Spark.*;
 
+import java.util.UUID;
+
 public class App {
 
   public static final Logger logger = Logger.getLogger(App.class);
@@ -14,6 +16,15 @@ public class App {
   public static void main(String[] args) {
 
     final var gson = new Gson();
+
+    DbOperations.list();
+
+    DbOperations.create(Contact.builder()
+        .id(UUID.randomUUID().toString())
+        .name("aaaaaaaa")
+        .address("aaaa")
+        .phoneNumber("aaaaaaa")
+        .build());
 
     port(80);
 

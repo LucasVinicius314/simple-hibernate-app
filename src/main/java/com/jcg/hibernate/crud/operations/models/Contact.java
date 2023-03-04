@@ -2,19 +2,19 @@ package com.jcg.hibernate.crud.operations.models;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Entity
 @Builder
+@Entity(name = "CONTATOS_731506")
 @Table(name = "CONTATOS_731506")
 public class Contact implements Serializable {
 
@@ -22,11 +22,11 @@ public class Contact implements Serializable {
 
   @Id
   @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private String id;
 
   @Column(name = "name")
-  private String nome;
+  private String name;
 
   @Column(name = "address")
   private String address;
