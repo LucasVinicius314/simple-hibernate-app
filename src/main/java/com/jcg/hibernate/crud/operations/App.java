@@ -1,48 +1,54 @@
 package com.jcg.hibernate.crud.operations;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
+
+import com.jcg.hibernate.crud.operations.models.Contact;
 
 public class App {
 
   public static final Logger logger = Logger.getLogger(App.class);
 
   public static void main(String[] args) {
-    logger.info(".......Hibernate Crud Operations Example.......\n");
+    logger.info("Hibernate Crud Operations Example");
 
-    logger.info("\n=======CREATE RECORDS=======\n");
-    DbOperations.createRecord();
+    read();
 
-    logger.info("\n=======READ RECORDS=======\n");
-    List<Contato> viewContatos = DbOperations.displayRecords();
-    if (viewContatos != null && !viewContatos.isEmpty()) {
-      for (Contato contatoObj : viewContatos) {
-        logger.info(contatoObj.toString());
-      }
-    }
+    create();
 
-    logger.info("\n=======UPDATE RECORDS=======\n");
-    int updateId = 1;
-    DbOperations.updateRecord(updateId);
+    read();
 
-    logger.info("\n=======READ RECORDS AFTER UPDATION=======\n");
-    List<Contato> updateContato = DbOperations.displayRecords();
-    if (updateContato != null && !updateContato.isEmpty()) {
-      for (Contato contatoObj : updateContato) {
-        logger.info(contatoObj.toString());
-      }
-    }
+    update();
 
-    logger.info("\n=======DELETE RECORD=======\n");
-    int deleteId = 5;
-    DbOperations.deleteRecord(deleteId);
-    logger.info("\n=======READ RECORDS AFTER DELETION=======\n");
-    List<Contato> deleteContatoRecord = DbOperations.displayRecords();
-    for (Contato contatoObj : deleteContatoRecord) {
+    read();
+
+    delete();
+
+    read();
+  }
+
+  static void create() {
+    logger.info("======= CREATE RECORDS");
+
+    DbOperations.createRecord(Contact.builder().build());
+  }
+
+  static void read() {
+    logger.info("======= READ RECORDS");
+
+    for (final var contatoObj : DbOperations.displayRecords()) {
       logger.info(contatoObj.toString());
     }
+  }
 
-    System.exit(0);
+  static void update() {
+    logger.info("======= UPDATE RECORDS");
+
+    DbOperations.updateRecord(Contact.builder().id(1).build());
+  }
+
+  static void delete() {
+    logger.info("======= DELETE RECORD");
+
+    DbOperations.deleteRecord(1);
   }
 }

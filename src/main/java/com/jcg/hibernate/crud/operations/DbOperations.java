@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
+import com.jcg.hibernate.crud.operations.models.Contact;
+
 public class DbOperations {
 
   private DbOperations() {
@@ -20,15 +22,11 @@ public class DbOperations {
   private static SessionFactory buildSessionFactory() {
     final var configObj = new Configuration();
 
-    final var connectionUrl = System.getenv("CONNECTION_URL");
-    final var connectionUsername = System.getenv("CONNECTION_USERNAME");
-    final var connectionPassword = System.getenv("CONNECTION_PASSWORD");
-
     configObj.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
     configObj.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-    configObj.setProperty("hibernate.connection.url", connectionUrl);
-    configObj.setProperty("hibernate.connection.username", connectionUsername);
-    configObj.setProperty("hibernate.connection.password", connectionPassword);
+    configObj.setProperty("hibernate.connection.url", Utils.CONNECTION_URL);
+    configObj.setProperty("hibernate.connection.username", Utils.CONNECTION_USERNAME);
+    configObj.setProperty("hibernate.connection.password", Utils.CONNECTION_PASSWORD);
     configObj.setProperty("show_sql", "true");
     configObj.setProperty("hibernate.current_session_context_class",
         "org.hibernate.context.internal.ThreadLocalSessionContext");
@@ -40,28 +38,16 @@ public class DbOperations {
     return sessionFactoryObj;
   }
 
-  public static void createRecord() {
-    int count = 0;
-    Contato contatoObj = null;
-
+  public static void createRecord(Contact contact) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
 
       sessionObj.beginTransaction();
 
-      for (int j = 101; j <= 105; j++) {
-        count = count + 1;
-        contatoObj = new Contato();
-        contatoObj.setEndereco("RUA XXXXX, 999");
-        contatoObj.setNome("aluno " + j);
-        contatoObj.setTelefone("(31)9999-8877");
-        sessionObj.save(contatoObj);
-      }
+      sessionObj.persist(contact);
 
       sessionObj.getTransaction().commit();
-
-      logger.info("\nSuccessfully Created '" + count + "' Records In The Database!\n");
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
     } finally {
@@ -69,18 +55,17 @@ public class DbOperations {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  public static List<Contato> displayRecords() {
+  public static List<Contact> displayRecords() {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
-      return sessionObj.createQuery("FROM Contato").list();
+      return sessionObj
+          .createQuery("FROM CONTATOS_731506", Contact.class)
+          .list();
     } catch (Exception sqlException) {
       if (null != sessionObj.getTransaction()) {
-        logger.info("\n.......Transaction Is Being Rolled Back.......\n");
-
         sessionObj.getTransaction().rollback();
       }
 
@@ -89,25 +74,24 @@ public class DbOperations {
       sessionObj.close();
     }
 
-    return new ArrayList<Contato>();
+    return new ArrayList<>();
   }
 
-  public static void updateRecord(int id) {
+  public static void updateRecord(Contact contact) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
-      final var contatObj = (Contato) sessionObj.get(Contato.class, id);
+      final var contactObj = sessionObj.get(Contact.class, contact.getId());
 
-      contatObj.setNome("Jose");
-      contatObj.setEndereco("AV AAA, 777");
+      contactObj.setNome(contact.getNome());
+      contactObj.setAddress(contact.getAddress());
+      contactObj.setPhoneNumber(contact.getPhoneNumber());
 
       sessionObj.getTransaction().commit();
-      logger.info("\nContato With Id?= " + id + " Is Successfully Updated In The Database!\n");
     } catch (Exception sqlException) {
       if (null != sessionObj.getTransaction()) {
-        logger.info("\n.......Transaction Is Being Rolled Back.......\n");
         sessionObj.getTransaction().rollback();
       }
 
@@ -117,22 +101,17 @@ public class DbOperations {
     }
   }
 
-  public static void deleteRecord(Integer id) {
+  public static void deleteRecord(int id) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
-      final var contatoObj = findRecordById(id);
-      sessionObj.delete(contatoObj);
+      sessionObj.remove(findRecordById(id));
 
       sessionObj.getTransaction().commit();
-
-      logger.info("\nContato With Id?= " + id + " Is Successfully Deleted From The Database!\n");
     } catch (Exception sqlException) {
       if (null != sessionObj.getTransaction()) {
-        logger.info("\n.......Transaction Is Being Rolled Back.......\n");
-
         sessionObj.getTransaction().rollback();
       }
 
@@ -142,21 +121,23 @@ public class DbOperations {
     }
   }
 
-  public static Contato findRecordById(Integer id) {
+  public static Contact findRecordById(int id) {
     final var sessionObj = buildSessionFactory().openSession();
 
     try {
       sessionObj.beginTransaction();
 
-      return (Contato) sessionObj.load(Contato.class, id);
+      return sessionObj.get(Contact.class, id);
     } catch (Exception sqlException) {
       if (null != sessionObj.getTransaction()) {
-        logger.info("\n.......Transaction Is Being Rolled Back.......\n");
         sessionObj.getTransaction().rollback();
       }
 
       sqlException.printStackTrace();
+    } finally {
+      sessionObj.close();
     }
+
     return null;
   }
 
@@ -166,14 +147,11 @@ public class DbOperations {
     try {
       sessionObj.beginTransaction();
 
-      final var queryObj = sessionObj.createQuery("DELETE FROM Contato");
-      queryObj.executeUpdate();
+      sessionObj.createQuery("DELETE FROM CONTATOS_731506", Contact.class).executeUpdate();
 
       sessionObj.getTransaction().commit();
-      logger.info("\nSuccessfully Deleted All Records From The Database Table!\n");
     } catch (Exception sqlException) {
       if (null != sessionObj.getTransaction()) {
-        logger.info("\n.......Transaction Is Being Rolled Back.......\n");
         sessionObj.getTransaction().rollback();
       }
 
