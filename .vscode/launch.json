@@ -9,7 +9,7 @@
       "name": "App",
       "request": "launch",
       "mainClass": "com.jcg.hibernate.crud.operations.App",
-      "projectName": "simple_hibernate_app",
+      "projectName": "HibernateCrud",
       "envFile": "${workspaceFolder}/.env"
     }
   ]
