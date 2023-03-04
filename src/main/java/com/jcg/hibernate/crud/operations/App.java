@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class AppMain {
+public class App {
 
-  public static final Logger logger = Logger.getLogger(AppMain.class);
+  public static final Logger logger = Logger.getLogger(App.class);
 
   public static void main(String[] args) {
     logger.info(".......Hibernate Crud Operations Example.......\n");

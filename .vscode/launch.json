@@ -6,10 +6,10 @@
   "configurations": [
     {
       "type": "java",
-      "name": "AppMain",
+      "name": "App",
       "request": "launch",
-      "mainClass": "com.jcg.hibernate.crud.operations.AppMain",
-      "projectName": "simple-hybernate-app",
+      "mainClass": "com.jcg.hibernate.crud.operations.App",
+      "projectName": "simple_hibernate_app",
       "envFile": "${workspaceFolder}/.env"
     }
   ]
