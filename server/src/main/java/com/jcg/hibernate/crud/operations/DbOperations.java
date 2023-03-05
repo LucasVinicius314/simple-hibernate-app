@@ -32,6 +32,8 @@ public class DbOperations {
       db.insert(contact);
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
+    } finally {
+      db.close();
     }
   }
 
@@ -44,6 +46,8 @@ public class DbOperations {
       sqlException.printStackTrace();
 
       return new ArrayList<>();
+    } finally {
+      db.close();
     }
   }
 
@@ -54,6 +58,8 @@ public class DbOperations {
       db.update(contact);
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
+    } finally {
+      db.close();
     }
   }
 
@@ -65,6 +71,8 @@ public class DbOperations {
       db.delete(contact);
     } catch (Exception sqlException) {
       sqlException.printStackTrace();
+    } finally {
+      db.close();
     }
   }
 }
