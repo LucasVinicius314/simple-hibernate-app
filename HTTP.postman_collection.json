@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "cbc6e5e5-99f4-4d73-a3c6-7da8f93a16b4",
+		"name": "HTTP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15788883"
+	},
+	"item": [
+		{
+			"name": "list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/contact",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"contact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/contact?name=aaaa&address=vvvvvvvvvv&phoneNumber=5yhthrh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"contact"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "aaaa"
+						},
+						{
+							"key": "address",
+							"value": "vvvvvvvvvv"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "5yhthrh"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
