@@ -3,8 +3,6 @@ package com.jcg.hibernate.crud.operations;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import com.dieselpoint.norm.Database;
 import com.jcg.hibernate.crud.operations.models.Contact;
 
@@ -12,8 +10,6 @@ public class DbOperations {
 
   private DbOperations() {
   }
-
-  public static final Logger logger = Logger.getLogger(DbOperations.class);
 
   static Database getConnection() {
     final var db = new Database();

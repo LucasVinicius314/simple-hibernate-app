@@ -1,7 +1,5 @@
 package com.jcg.hibernate.crud.operations;
 
-import org.apache.log4j.Logger;
-
 import com.google.gson.Gson;
 import com.jcg.hibernate.crud.operations.models.Contact;
 
@@ -11,8 +9,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class App {
-
-  public static final Logger logger = Logger.getLogger(App.class);
 
   public static void main(String[] args) {
 
