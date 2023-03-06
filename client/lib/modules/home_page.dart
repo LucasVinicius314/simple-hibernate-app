@@ -32,38 +32,49 @@ class _HomePageState extends State<HomePage> {
         children: [
           Card(
             margin: EdgeInsets.zero,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
                     'Contatos',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  const SizedBox(height: 16),
-                  FutureBuilder(
-                    future: _future,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return const Text('Algo deu errado.');
-                      }
+                ),
+                FutureBuilder(
+                  future: _future,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Algo deu errado.');
+                    }
 
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return const Text('Done');
-                      }
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      final contacts = snapshot.data ?? [];
 
-                      return const Center(
+                      return Column(
+                        children: contacts.map((e) {
+                          return ListTile(
+                            title: Text(e.name ?? ''),
+                            subtitle: Text(e.address ?? ''),
+                          );
+                        }).toList(),
+                      );
+                    }
+
+                    return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(
                         child: SizedBox(
                           width: 32,
                           height: 32,
                           child: CircularProgressIndicator(),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ],
