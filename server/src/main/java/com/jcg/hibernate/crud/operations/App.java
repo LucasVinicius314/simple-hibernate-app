@@ -16,12 +16,12 @@ public class App {
 
     port(80);
 
-    path("/api", () -> {
-      before((req, res) -> {
-        res.type("application/json");
-        res.header("Access-Control-Allow-Origin", "*");
-      });
+    before((req, res) -> {
+      res.type("application/json");
+      res.header("Access-Control-Allow-Origin", "*");
+    });
 
+    path("/api", () -> {
       get(Utils.CONTACT_PATH, (req, res) -> {
         return DbOperations.list();
       }, gson::toJson);
