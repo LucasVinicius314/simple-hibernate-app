@@ -10,5 +10,4 @@ public class Utils {
   public static final String CONNECTION_PASSWORD = System.getenv("CONNECTION_PASSWORD");
 
   static final String CONTACT_PATH = "/contact";
-  static final String CONTENT_TYPE = "application/json";
 }

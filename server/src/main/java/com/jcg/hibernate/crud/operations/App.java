@@ -17,8 +17,12 @@ public class App {
     port(80);
 
     path("/api", () -> {
+      before((req, res) -> {
+        res.type("application/json");
+        res.header("Access-Control-Allow-Origin", "*");
+      });
+
       get(Utils.CONTACT_PATH, (req, res) -> {
-        res.type(Utils.CONTENT_TYPE);
         return DbOperations.list();
       }, gson::toJson);
 
@@ -36,7 +40,6 @@ public class App {
             .phoneNumber(phoneNumber)
             .build());
 
-        res.type(Utils.CONTENT_TYPE);
         return new HashMap<>();
       }, gson::toJson);
 
@@ -54,7 +57,6 @@ public class App {
             .phoneNumber(phoneNumber)
             .build());
 
-        res.type(Utils.CONTENT_TYPE);
         return new HashMap<>();
       }, gson::toJson);
 
@@ -65,7 +67,6 @@ public class App {
             .id(id)
             .build());
 
-        res.type(Utils.CONTENT_TYPE);
         return new HashMap<>();
       }, gson::toJson);
     });
