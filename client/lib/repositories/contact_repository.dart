@@ -2,9 +2,12 @@ import 'package:simple_hibernate_app/models/contact.dart';
 import 'package:simple_hibernate_app/utils/api.dart';
 
 class ContactRepository {
-  Future<void> create() async {
-    // TODO: fix
-    await Api.post(path: 'contact', queryParameters: {}, body: {});
+  Future<void> create({required Contact contact}) async {
+    await Api.post(path: 'contact', queryParameters: {}, body: {
+      'address': contact.address,
+      'name': contact.name,
+      'phoneNumber': contact.phoneNumber,
+    });
   }
 
   Future<List<Contact>> list() async {

@@ -17,6 +17,60 @@ class _HomePageState extends State<HomePage> {
 
   final _repository = ContactRepository();
 
+  Future<void> _create() async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    final ans = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Novo contato'),
+          actions: [
+            TextButton(
+              child: const Text('CRIAR'),
+              onPressed: () async {
+                // TODO: fix
+                await Navigator.of(context).maybePop(
+                  Contact(
+                    id: '',
+                    name: 'Algo',
+                    address: 'aaa',
+                    phoneNumber: 'bbbbb',
+                  ),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('CANCELAR'),
+              onPressed: () async {
+                await Navigator.of(context).maybePop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    if (ans is Contact) {
+      setState(() {
+        _future = null;
+      });
+
+      await _repository.create(contact: ans);
+
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Contato criado.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+
+      setState(() {
+        _future = _repository.list();
+      });
+    }
+  }
+
   Future<void> _delete({required String id}) async {
     final messenger = ScaffoldMessenger.of(context);
 
@@ -72,9 +126,7 @@ class _HomePageState extends State<HomePage> {
                       TextButton.icon(
                         icon: const Icon(Icons.add),
                         label: const Text('NOVO CONTATO'),
-                        onPressed: () {
-                          // TODO: fix
-                        },
+                        onPressed: _create,
                       ),
                     ],
                   ),
