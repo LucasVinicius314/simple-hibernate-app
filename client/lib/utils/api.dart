@@ -17,6 +17,10 @@ class Api {
 
   static const _path = '/api/';
 
+  static const _headers = {
+    'Content-Type': 'application/json',
+  };
+
   static Uri _getUri({
     required String uri,
     required Map<String, dynamic> queryParameters,
@@ -35,6 +39,7 @@ class Api {
         uri: path,
         queryParameters: queryParameters,
       ),
+      headers: _headers,
     );
 
     return jsonDecode(res.body);
@@ -50,6 +55,7 @@ class Api {
         uri: path,
         queryParameters: queryParameters,
       ),
+      headers: _headers,
       body: jsonEncode(body),
     );
 
@@ -66,6 +72,7 @@ class Api {
         uri: path,
         queryParameters: queryParameters,
       ),
+      headers: _headers,
       body: jsonEncode(body),
     );
 
@@ -82,6 +89,7 @@ class Api {
         uri: path,
         queryParameters: queryParameters,
       ),
+      headers: _headers,
       body: jsonEncode(body),
     );
 

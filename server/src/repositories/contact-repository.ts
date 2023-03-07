@@ -1,6 +1,6 @@
-import { randomUUID } from 'crypto'
-import { ContactModel } from '../services/sequelize'
 import { ContactInstance } from '../typescript/contact'
+import { ContactModel } from '../services/sequelize'
+import { v4 as uuidv4 } from 'uuid'
 
 export class ContactRepository {
   create: (params: {
@@ -12,7 +12,7 @@ export class ContactRepository {
       address,
       name,
       phoneNumber,
-      id: randomUUID(),
+      id: uuidv4(),
     })
   }
 
