@@ -17,9 +17,12 @@ class ContactRepository {
     return res.map((e) => Contact.fromJson(e)).toList();
   }
 
-  Future<void> update() async {
-    // TODO: fix
-    await Api.patch(path: 'contact', queryParameters: {}, body: {});
+  Future<void> update({required Contact contact}) async {
+    await Api.patch(path: 'contact/${contact.id}', queryParameters: {}, body: {
+      'address': contact.address,
+      'name': contact.name,
+      'phoneNumber': contact.phoneNumber,
+    });
   }
 
   Future<void> delete({required String id}) async {

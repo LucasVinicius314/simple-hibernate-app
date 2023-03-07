@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_hibernate_app/models/contact.dart';
 import 'package:simple_hibernate_app/repositories/contact_repository.dart';
 import 'package:simple_hibernate_app/widgets/base_page.dart';
+import 'package:simple_hibernate_app/widgets/upsert_contact_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,31 +24,7 @@ class _HomePageState extends State<HomePage> {
     final ans = await showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Novo contato'),
-          actions: [
-            TextButton(
-              child: const Text('CRIAR'),
-              onPressed: () async {
-                // TODO: fix
-                await Navigator.of(context).maybePop(
-                  Contact(
-                    id: '',
-                    name: 'Algo',
-                    address: 'aaa',
-                    phoneNumber: 'bbbbb',
-                  ),
-                );
-              },
-            ),
-            TextButton(
-              child: const Text('CANCELAR'),
-              onPressed: () async {
-                await Navigator.of(context).maybePop();
-              },
-            ),
-          ],
-        );
+        return const UpsertContactDialog(contact: null);
       },
     );
 
@@ -69,6 +46,38 @@ class _HomePageState extends State<HomePage> {
         _future = _repository.list();
       });
     }
+  }
+
+  Future<void> _update({required Contact contact}) async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final ans = await showDialog(
+        context: context,
+        builder: (context) {
+          return UpsertContactDialog(contact: contact);
+        },
+      );
+
+      if (ans is Contact) {
+        setState(() {
+          _future = null;
+        });
+
+        await _repository.update(contact: ans);
+
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('Contato ataulizado.'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+
+        setState(() {
+          _future = _repository.list();
+        });
+      }
+    });
   }
 
   Future<void> _delete({required String id}) async {
@@ -168,24 +177,32 @@ class _HomePageState extends State<HomePage> {
                           return ListTile(
                             title: Text(contact.name ?? ''),
                             subtitle: Text(contact.address ?? ''),
-                            trailing: PopupMenuButton<int>(
-                              tooltip: 'Mais opções',
-                              itemBuilder: (context) {
-                                return [
-                                  PopupMenuItem(
-                                    child: const Text('Editar'),
-                                    onTap: () {
-                                      // TODO: fix
-                                    },
-                                  ),
-                                  PopupMenuItem(
-                                    child: const Text('Excluir'),
-                                    onTap: () async {
-                                      await _delete(id: contact.id ?? '');
-                                    },
-                                  ),
-                                ];
-                              },
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(contact.phoneNumber ?? ''),
+                                const SizedBox(width: 16),
+                                PopupMenuButton<int>(
+                                  tooltip: 'Mais opções',
+                                  itemBuilder: (context) {
+                                    return [
+                                      PopupMenuItem(
+                                        child: const Text('Editar'),
+                                        onTap: () async {
+                                          await _update(contact: contact);
+                                        },
+                                      ),
+                                      PopupMenuItem(
+                                        child: const Text('Excluir'),
+                                        onTap: () async {
+                                          await _delete(id: contact.id ?? '');
+                                        },
+                                      ),
+                                    ];
+                                  },
+                                ),
+                              ],
                             ),
                           );
                         },
