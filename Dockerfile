@@ -40,7 +40,7 @@ FROM node as builder
 
 WORKDIR /app
 
-COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json .
+COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json ./
 
 RUN yarn install --frozen-lockfile
 
@@ -55,13 +55,13 @@ FROM node:slim
 
 WORKDIR /app
 
-COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json .
+COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json ./
 
 COPY --from=builder /app/build /app/build
 
-COPY --from=client-builder /app/build/web /app/static
+COPY --from=client-builder /app/build/web /app/public
 
-RUN chmod -R 777 /app/static
+RUN chmod -R 777 /app/public
 
 RUN yarn install --production --frozen-lockfile
 
