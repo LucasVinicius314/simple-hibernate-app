@@ -32,6 +32,8 @@ const main = async () => {
 
   app.use(json())
 
+  app.use(express.static('public'))
+
   app.use((req, res, next) => {
     const now = new Date()
 
