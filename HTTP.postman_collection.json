@@ -30,8 +30,17 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"aaaa\",\r\n    \"address\": \"vvvvvvvvvv\",\r\n    \"phoneNumber\": \"asdasdasd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost/api/contact?name=aaaa&address=vvvvvvvvvv&phoneNumber=5yhthrh",
+					"raw": "http://localhost/api/contact",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -39,20 +48,55 @@
 					"path": [
 						"api",
 						"contact"
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": "aaaa"
-						},
-						{
-							"key": "address",
-							"value": "vvvvvvvvvv"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "5yhthrh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"aaaa\",\r\n    \"address\": \"vvvvvvvvvv\",\r\n    \"phoneNumber\": \"asdasdasd\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
 						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/api/contact/aaaaa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"contact",
+						"aaaaa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/contact/06c9fd0f-8c5b-4978-b526-f9f5c82f39c5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"contact",
+						"06c9fd0f-8c5b-4978-b526-f9f5c82f39c5"
 					]
 				}
 			},
