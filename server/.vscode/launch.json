@@ -5,11 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "java",
-      "name": "App",
+      "type": "node",
       "request": "launch",
-      "mainClass": "com.jcg.hibernate.crud.operations.App",
-      "projectName": "simple_hibernate_app",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}\\build\\index.js",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "outFiles": ["${workspaceFolder}/build/**/*.js"],
       "envFile": "${workspaceFolder}/.env"
     }
   ]
