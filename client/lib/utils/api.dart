@@ -77,7 +77,7 @@ class Api {
     required Map<String, dynamic> queryParameters,
     required Map<String, dynamic> body,
   }) async {
-    final res = await client.patch(
+    final res = await client.delete(
       _getUri(
         uri: path,
         queryParameters: queryParameters,
