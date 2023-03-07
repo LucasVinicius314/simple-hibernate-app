@@ -31,14 +31,16 @@ RUN flutter pub get
 
 RUN flutter build web --release
 
+RUN echo $(ls -1 /app/build/web)
+
 #
 # Builder
 #
 FROM node as builder
 
-WORKDIR /usr/app
+WORKDIR /app
 
-COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json ./
+COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json .
 
 RUN yarn install --frozen-lockfile
 
@@ -51,11 +53,11 @@ RUN yarn build
 #
 FROM node:slim
 
-WORKDIR /usr/app
+WORKDIR /app
 
-COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json ./
+COPY ./server/package.json ./server/yarn.lock ./server/tsconfig.json .
 
-COPY --from=builder /usr/app/build ./build
+COPY --from=builder /app/build /app/build
 
 COPY --from=client-builder /app/build/web /app/static
 
