@@ -63,7 +63,6 @@ public class DbOperations {
     final var db = getConnection();
 
     try {
-
       db.delete(contact);
     } catch (Exception sqlException) {
       sqlException.printStackTrace();

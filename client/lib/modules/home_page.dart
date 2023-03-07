@@ -17,6 +17,27 @@ class _HomePageState extends State<HomePage> {
 
   final _repository = ContactRepository();
 
+  Future<void> _delete({required String id}) async {
+    final messenger = ScaffoldMessenger.of(context);
+
+    setState(() {
+      _future = null;
+    });
+
+    await _repository.delete(id: id);
+
+    messenger.showSnackBar(
+      const SnackBar(
+        content: Text('Contato excluído.'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    setState(() {
+      _future = _repository.list();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,33 +53,98 @@ class _HomePageState extends State<HomePage> {
         children: [
           Card(
             margin: EdgeInsets.zero,
+            clipBehavior: Clip.antiAlias,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(
-                    'Contatos',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Contatos',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      TextButton.icon(
+                        icon: const Icon(Icons.add),
+                        label: const Text('NOVO CONTATO'),
+                        onPressed: () {
+                          // TODO: fix
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 FutureBuilder(
                   future: _future,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return const Text('Algo deu errado.');
+                      return const Padding(
+                        padding: EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          bottom: 16,
+                        ),
+                        child: Text('Algo deu errado.'),
+                      );
                     }
 
                     if (snapshot.connectionState == ConnectionState.done) {
                       final contacts = snapshot.data ?? [];
 
-                      return Column(
-                        children: contacts.map((e) {
+                      if (contacts.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            bottom: 16,
+                          ),
+                          child: Text('Nenhum contato encontrado.'),
+                        );
+                      }
+
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(bottom: 8),
+                        itemBuilder: (context, index) {
+                          final contact = contacts[index];
+
                           return ListTile(
-                            title: Text(e.name ?? ''),
-                            subtitle: Text(e.address ?? ''),
+                            title: Text(contact.name ?? ''),
+                            subtitle: Text(contact.address ?? ''),
+                            trailing: PopupMenuButton<int>(
+                              tooltip: 'Mais opções',
+                              itemBuilder: (context) {
+                                return [
+                                  PopupMenuItem(
+                                    child: const Text('Editar'),
+                                    onTap: () {
+                                      // TODO: fix
+                                    },
+                                  ),
+                                  PopupMenuItem(
+                                    child: const Text('Excluir'),
+                                    onTap: () async {
+                                      await _delete(id: contact.id ?? '');
+                                    },
+                                  ),
+                                ];
+                              },
+                            ),
                           );
-                        }).toList(),
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider(
+                            height: 0,
+                            indent: 16,
+                            endIndent: 16,
+                          );
+                        },
+                        itemCount: contacts.length,
                       );
                     }
 
