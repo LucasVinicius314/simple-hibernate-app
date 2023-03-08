@@ -68,5 +68,4 @@ RUN chmod -R 777 /app/public
 
 RUN yarn install --production --frozen-lockfile
 
-EXPOSE 80
 CMD [ "node", "build/index.js" ]
